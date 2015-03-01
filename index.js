@@ -13,7 +13,7 @@ class Iter {
 		this.index = 0;
 		this.array = false;
 		if (typeof collection[Symbol.iterator] === 'function') {
-			this.iter = collection[Symbol.iterator];
+			this.iter = collection[Symbol.iterator]();
 			if (collection.constructor === Map) {
 				this.array = true;
 			}
@@ -24,8 +24,8 @@ class Iter {
 			this.array = true;
 		}
 	}
-	next(...args) {
-		return this.iter.next(...args);
+	next() {
+		return this.iter.next();
 	}
 	toArray() {
 		let out = [];
