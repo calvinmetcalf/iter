@@ -4,6 +4,7 @@ let ZipIter = require('./zip');
 let FlattenIter = require('./flatten');
 
 let Item = require('./item');
+
 class Iter {
 	constructor(collection,  ...args) {
 		if (typeof collection === 'function') {
@@ -79,3 +80,6 @@ class Iter {
 		return new Iter(FlattenIter(this, Iter));
 	}
 }
+
+
+module.exports = Iter;
