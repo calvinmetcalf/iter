@@ -7,7 +7,7 @@ class ObjectIter {
 		this.index = 0;
 	}
 	next() {
-		if (this.index > this.keys.length) {
+		if (this.index >= this.keys.length) {
 			return new Item(void 0, true);
 		}
 		let key = this.keys[this.index++];

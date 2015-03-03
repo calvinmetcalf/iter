@@ -11,7 +11,7 @@ class MapIter {
 		if (value.done) {
 			return value;
 		} else if (this.iter.array) {
-			return new Item(this.func(value.value[1], value.value[0]));
+			return new Item(this.func(value.value[0], value.value[1]));
 		} else {
 			return new Item(this.func(value.value, this.index++));
 		}

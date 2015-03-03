@@ -1,32 +1,29 @@
-let Item = require('./item');
 
 class FlattenIter {
-	constructor(iter, Iter) {
-		this.iter = iter;
-		this.Iter = Iter;
-		this.tempIter = void 0;
+	constructor(iter) {
+		this.iters = [iter]
+		this.done = false;
 	}
 
-	getTempIter() {
-		let tempIter = this.iter.next();
-		if (tempIter.done) {
-			return true;
-		} else {
-			this.tempIter = new this.Iter(tempIter.value);
-			return false;
-		}
-	}
 
 	next() {
-		if (!this.tempIter) {
-			if(this.getTempIter()) {
-				return new Item(void 0, true);
-			}
+		if (this.done) {
+			return this.done;
 		}
-		let value = this.tempIter.next();
-		while (value.done) {
-			if(this.getTempIter()) {
-				return new Item(void 0, true);
+		let value = false;
+		while (value === false) {
+			let currentIter = this.iters[this.iters.length - 1];
+			value = currentIter.next();
+			if (value.done) {
+				if (this.iters.length === 1) {
+					this.done = value;
+					return value;
+				}
+				this.iters.pop();
+				value = false;
+			} else if (typeof value.value[Symbol.iterator] === 'function') {
+				this.iters.push(value.value[Symbol.iterator]());
+				value = false;
 			}
 		}
 		return value;

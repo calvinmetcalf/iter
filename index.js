@@ -2,16 +2,18 @@ let ObjectIter = require('./object');
 let MapIter = require('./map');
 let ZipIter = require('./zip');
 let FlattenIter = require('./flatten');
+let FilterIter = require('./filter');
 
 let Item = require('./item');
 
 class Iter {
 	constructor(collection,  ...args) {
+		
+		this.index = 0;
+		this.array = false;
 		if (typeof collection === 'function') {
 			collection = collection(...args);
 		}
-		this.index = 0;
-		this.array = false;
 		if (typeof collection[Symbol.iterator] === 'function') {
 			this.iter = collection[Symbol.iterator]();
 			if (collection.constructor === Map) {
@@ -23,6 +25,9 @@ class Iter {
 			this.iter = new ObjectIter(collection);
 			this.array = true;
 		}
+	}
+	[Symbol.iterator](){
+		return this;
 	}
 	next() {
 		return this.iter.next();
@@ -61,7 +66,7 @@ class Iter {
 		if (!this.array) {
 			throw new TypeError('I don\'t know how to turn this into a Map');
 		}
-		return Map(this);
+		return new Map(this);
 	}
 	map(func) {
 		return new Iter(new MapIter(this, func));
@@ -70,14 +75,19 @@ class Iter {
 		return new Iter(new FilterIter(this, func));
 	}
 	zip(...args) {
-		let out = ZipIter(...args);
-		if (args.length === 2) {
+		let out = new Iter(new ZipIter(this, ...args.map(item=>{
+			if (item instanceof Iter) {
+				return item;
+			}
+			return new Iter(item);
+		})));
+		if (args.length === 1) {
 			out.array = true;
 		}
 		return out;
 	}
-	flatten() {
-		return new Iter(FlattenIter(this, Iter));
+	flatten(deep) {
+		return new Iter(new FlattenIter(this, Iter));
 	}
 }
 

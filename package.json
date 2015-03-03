@@ -1,0 +1,26 @@
+{
+  "name": "iter",
+  "version": "1.0.0",
+  "description": "iter ===",
+  "main": "index.js",
+  "scripts": {
+    "test": "babel-node -r test.js | tspec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calvinmetcalf/iter.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/calvinmetcalf/iter/issues"
+  },
+  "homepage": "https://github.com/calvinmetcalf/iter",
+  "dependencies": {
+    "tape": "^3.5.0"
+  },
+  "devDependencies": {
+    "babel": "^4.6.6",
+    "tap-spec": "^2.2.2"
+  }
+}
