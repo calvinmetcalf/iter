@@ -3,13 +3,12 @@ let MapIter = require('./map');
 let ZipIter = require('./zip');
 let FlattenIter = require('./flatten');
 let FilterIter = require('./filter');
-
+let GroupIter = require('./group');
 let Item = require('./item');
 
 class Iter {
 	constructor(collection,  ...args) {
 		
-		this.index = 0;
 		this.array = false;
 		if (typeof collection === 'function') {
 			collection = collection(...args);
@@ -89,6 +88,16 @@ class Iter {
 	flatten(deep) {
 		return new Iter(new FlattenIter(this, Iter));
 	}
+	group(by) {
+		if (by === 1) {
+			return this;
+		}
+		let out = new Iter(new GroupIter(this, by));
+		if (by === 2) {
+			out.array = true;
+		}
+		return out;
+ 	}
 }
 
 

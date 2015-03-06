@@ -36,4 +36,13 @@ test('flatten', t=>{
     yield 8;
     yield 9;
   }()]]).flatten().toArray(), [1,2,3,4,5,6,7,8,9]);
-})
+});
+
+test('group', t=>{
+  t.plan(2);
+  t.deepEquals(new Iter([1,[[new Set([2,3,4]), 5], 6, 7, function *(){
+    yield 8;
+    yield 9;
+  }()]]).flatten().group(3).toArray(), [[1,2,3],[4,5,6],[7,8,9]]);
+  t.deepEquals(new Iter(['foo', 'bar', 'baz','bat']).group(2).toObject(), {foo:'bar',baz:'bat'});
+});
