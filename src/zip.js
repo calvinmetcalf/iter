@@ -1,12 +1,13 @@
 let Item = require('./item');
 
 class ZipIter {
-	constructor(...args) {
+	constructor(func, ...args) {
 		this.iters = args;
+    this.func = func;
 	}
 	next() {
 		let values = this.iters.map(iter=>iter.next());
-		var plucked = values.map(item=>item.value);
+		var plucked = this.func(...values.map(item=>item.value));
 		var done = values.some(value => value.done);
 		return new Item(plucked, done);
 	}

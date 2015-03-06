@@ -5,7 +5,9 @@ let FlattenIter = require('./flatten');
 let FilterIter = require('./filter');
 let GroupIter = require('./group');
 let Item = require('./item');
-
+require("babel/polyfill");
+let noAcc = Symbol('no acc');
+let zipFunc = (...args)=>args;
 class Iter {
 	constructor(collection,  ...args) {
 		
@@ -74,16 +76,19 @@ class Iter {
 		return new Iter(new FilterIter(this, func));
 	}
 	zip(...args) {
-		let out = new Iter(new ZipIter(this, ...args.map(item=>{
+		let out = this.zipWith(zipFunc, ...args);
+		if (args.length === 1) {
+			out.array = true;
+		}
+		return out;
+	}
+	zipWith(func, ...args) {
+		return new Iter(new ZipIter(func, this, ...args.map(item=>{
 			if (item instanceof Iter) {
 				return item;
 			}
 			return new Iter(item);
 		})));
-		if (args.length === 1) {
-			out.array = true;
-		}
-		return out;
 	}
 	flatten(deep) {
 		return new Iter(new FlattenIter(this, Iter));
@@ -97,6 +102,27 @@ class Iter {
 			out.array = true;
 		}
 		return out;
+ 	}
+ 	forEach(func) {
+ 		if (this.array) {
+ 			for (let [key, value] of this) {
+ 				func(key, value);
+ 			}
+ 		} else {
+ 			let i = 0;
+ 			for (let value of this) {
+ 				func(value, i++);
+ 			}
+ 		}
+ 	}
+ 	reduce(func, acc=noAcc) {
+ 		if (acc === noAcc) {
+ 			acc = this.next().value;
+ 		}
+ 		for (let value of this) {
+ 			acc = func(acc, value);
+ 		}
+ 		return acc;
  	}
 }
 

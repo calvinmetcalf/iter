@@ -2,9 +2,11 @@
   "name": "iter-utils",
   "version": "1.1.0",
   "description": "iter ===",
-  "main": "index.js",
+  "main": "lib",
   "scripts": {
-    "test": "babel-node -r test.js | tspec"
+    "test": "npm run build && node test-src.js | tspec",
+    "build": "npm run build-test && babel -s src --out-dir lib",
+    "build-test": "babel test.js > test-src.js"
   },
   "repository": {
     "type": "git",
@@ -17,10 +19,11 @@
   },
   "homepage": "https://github.com/calvinmetcalf/iter",
   "dependencies": {
-    "tape": "^3.5.0"
+   
   },
   "devDependencies": {
-    "babel": "^4.6.6",
-    "tap-spec": "^2.2.2"
+    "babel": "~4.6.6",
+    "tap-spec": "^2.2.2",
+     "tape": "^3.5.0"
   }
 }
