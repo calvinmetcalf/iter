@@ -1,6 +1,6 @@
 {
   "name": "iter-utils",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "iter ===",
   "main": "lib",
   "scripts": {
@@ -18,12 +18,10 @@
     "url": "https://github.com/calvinmetcalf/iter/issues"
   },
   "homepage": "https://github.com/calvinmetcalf/iter",
-  "dependencies": {
-   
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel": "~4.6.6",
     "tap-spec": "^2.2.2",
-     "tape": "^3.5.0"
+    "tape": "^3.5.0"
   }
 }
